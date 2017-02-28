@@ -31,7 +31,17 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+.Rproj.user
 
-# other stuff
 .DS_Store
 *~
+
+*.log
+*logs
+log4j*
+
+# course specific stuff
+Exercises/solutions/df*_tmp
+Exercises/solutions/tmpFile*_*
+Exercises/solutions/data
+Exercises/data
