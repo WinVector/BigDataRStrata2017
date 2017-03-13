@@ -25,7 +25,7 @@ Run the following block to connect to the cluster and copy the flights data usin
 ```{r message=FALSE, warning=FALSE}
 
 sc <- spark_connect(master = "local", version = "2.0.0", hadoop_version="2.7")
-flights_tbl <- spark_read_parquet(sc, "flights", "data/nycflights13-parquet/flights")
+flights_tbl <- spark_read_parquet(sc, "flights", "datainputs/nycflights13-parquet/flights")
 airlines_tbl <- copy_to(sc, airlines, "airlines", overwrite = TRUE)
 
 src_tbls(sc)
