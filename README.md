@@ -1,13 +1,5 @@
----
-output:
-  md_document:
-    variant: markdown_github
----
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 This is where we will distribute all materials for:
-
 
 #### [Modeling big data with R, sparklyr, and Apache Spark](https://conferences.oreilly.com/strata/strata-ca/public/schedule/detail/55791)
 
@@ -18,58 +10,39 @@ This is where we will distribute all materials for:
     Secondary topics:  R
 
     John Mount  (Win-Vector LLC)
-    
-    
-    
+
 Please do not peak too much yet!
 
 Description from Strata announcement
--------------
-  
-  
-  Modeling big data with R, sparklyr, and Apache Spark
-  
-John Mount (Win Vector LLC)
-1:30pm–5:00pm Tuesday, March 14, 2017
-Data science & advanced analytics
-Location: LL21 C/D
-Level: Intermediate
-Secondary topics:  R
+------------------------------------
+
+Modeling big data with R, sparklyr, and Apache Spark
+
+John Mount (Win Vector LLC) 1:30pm–5:00pm Tuesday, March 14, 2017 Data science & advanced analytics Location: LL21 C/D Level: Intermediate Secondary topics: R
 
 Who is this presentation for?
 
-Data scientists, data analysts, modelers, R users, Spark users, statisticians, and those in IT
-Prerequisite knowledge
+Data scientists, data analysts, modelers, R users, Spark users, statisticians, and those in IT Prerequisite knowledge
 
-Basic familiarity with R
-Experience using the dplyr R package (If you have not used dplyr before, please read this chapter before coming to class.)
-Materials or downloads needed in advance
+Basic familiarity with R Experience using the dplyr R package (If you have not used dplyr before, please read this chapter before coming to class.) Materials or downloads needed in advance
 
-A WiFi-enabled laptop (You'll be provided an RStudio Server Pro login for students to use on the day of the workshop.)
-What you'll learn
+A WiFi-enabled laptop (You'll be provided an RStudio Server Pro login for students to use on the day of the workshop.) What you'll learn
 
-Learn how to quickly set up a local Spark instance, store big data in Spark and then connect to the data with R, use R to apply machine-learning algorithms to big data stored in Spark, and filter and aggregate big data stored in Spark and then import the results into R for analysis and visualization
-Understand how to extend R (sparklyr) to access the entire Spark API
-Description
+Learn how to quickly set up a local Spark instance, store big data in Spark and then connect to the data with R, use R to apply machine-learning algorithms to big data stored in Spark, and filter and aggregate big data stored in Spark and then import the results into R for analysis and visualization Understand how to extend R (sparklyr) to access the entire Spark API Description
 
 Sparklyr, developed by RStudio in conjunction with IBM, Cloudera, and H2O, provides an R interface to Spark’s distributed machine-learning algorithms and much more. Sparklyr makes practical machine learning scalable and easy. With sparklyr, you can interactively manipulate Spark data using both dplyr and SQL (via DBI); filter and aggregate Spark datasets then bring them into R for analysis and visualization; orchestrate distributed machine learning from R using either Spark MLlib or H2O SparkingWater; create extensions that call the full Spark API and provide interfaces to Spark packages; and establish Spark connections and browse Spark data frames within the RStudio IDE.
 
 John Mount demonstrates how to use sparklyr to analyze big data in Spark, covering filtering and manipulating Spark data to import into R and using R to run machine-learning algorithms on data in Spark. John also also explores the sparklyr integration built into the RStudio IDE.
 
-
-
-
 ###### config
 
-Materials in preparation for [Strata March 2017](https://conferences.oreilly.com/strata/strata-ca/public/schedule/detail/55791) 
+Materials in preparation for [Strata March 2017](https://conferences.oreilly.com/strata/strata-ca/public/schedule/detail/55791)
 
-Derived from [https://github.com/rstudio/Strata2016](https://github.com/rstudio/Strata2016).
-Public repository will be [https://github.com/WinVector/BigDataRStrata2017](https://github.com/WinVector/BigDataRStrata2017).
+Derived from <https://github.com/rstudio/Strata2016>. Public repository will be <https://github.com/WinVector/BigDataRStrata2017>.
 
- 
 Current list of CRAN packages used:
 
-```{r cranpackges, eval=FALSE}
+``` r
 # often a good idea, though try "n" to build source
 # may interfere with us pinning h2o to a specific version
 # update.packages(ask=FALSE) 
@@ -99,7 +72,7 @@ cranpkgs <- c(
 install.packages(cranpkgs)
 ```
 
-```{r githubddevpkgs, eval=FALSE}
+``` r
 devpkgs <- c(
   'RStudio/EDAWR',
   'WinVector/replyr',
@@ -110,13 +83,11 @@ for(pkgi in devpkgs) {
 }
 ```
 
-
-Also it is critical to look at [Exercises/solutions/RsparklingExample.Rmd](Exercises/solutions/RsparklingExample.Rmd) as it installs and configures some packages.  A refresh of all packages will break the matching version numbers required by `h2o` and `rsparkling`.  So please work through the details in `RsparklingExample.Rmd` after updating and installing all the above packages.
+Also it is critical to look at [Exercises/solutions/RsparklingExample.Rmd](Exercises/solutions/RsparklingExample.Rmd) as it installs and configures some packages. A refresh of all packages will break the matching version numbers required by `h2o` and `rsparkling`. So please work through the details in `RsparklingExample.Rmd` after updating and installing all the above packages.
 
 A copy of those note are below (but it is better to look at `RsparklingExample.Rmd`).
 
-
-```{r installh2o, eval=FALSE}
+``` r
 # updated from https://gist.github.com/edgararuiz/6453d44a91c85a87998cfeb0dfed9fa9
 # The following two commands remove any previously installed H2O packages for R.
 if ("package:h2o" %in% search()) { detach("package:h2o", unload=TRUE) }
@@ -138,7 +109,3 @@ options(rsparkling.sparklingwater.version = "2.0.3")
 install.packages("sparklyr")
 sparklyr::spark_install(version = "2.0.0")
 ```
-
-
-  
-
