@@ -1,0 +1,145 @@
+---
+title: "R with Big Data 2: Big Data and Databases"
+author: "Garrett Grolemund and Nathan Stephens"
+date: "September 27, 2016"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+library(dplyr)
+library(rbokeh)
+```
+
+
+# Big Data with R
+
+To work with "big data" using `R` (big data being more than you can fit comforably)
+in RAM you must use remote sevice (such as a database or Spark).  Here
+we are going to simulate using a remote service using a small amount of data
+and an in-memory `SQLite` database.  This is a warm-up before moving on to a
+local (4 cpu single machine) `Spark` cluster.  The idea is: the commands that
+work at this scale (and it is quick to try things in `SQLite` and on a single
+node `Spark` cluster) will also work on a industrial scale `Spark` cluster.
+
+## dplyr database workflow
+
+Use a five step workflow to manipulate data stored in a database with dplyr:
+
+1. Create a connection to a database with a dplyr driver function.     Available drivers include:
+
+      *  `src_postgres()`
+      *  `src_sqlite()`
+      *  `src_mysql()`
+      *  `Spark`
+      *  `bigquery::src_bigquery()`
+
+    ````r
+    library("dplyr")
+    con <- dplyr::src_sqlite(":memory:", create = TRUE)
+    src_tbls(con) # lists tables in the database
+    ````
+    
+    We can also insert some practice data:
+    
+    ````r
+    iris_handle <- copy_to(con, iris, 'iris')
+    ````
+
+2. Create a reference to a existing table in the database with `tbl()`
+
+    ````r
+    tab <- tbl(con, "iris")
+    ````
+
+3. Manipulate the table reference with common dplyr functions, and basic R operations.
+
+    ````r
+    tab %>% 
+      filter(Sepal.Length > 1)
+    ````
+    
+    Notice operations are identical for local data (such as `iris`) and remote data
+    (such as `tab`).  This is the big advantage of using `SparklyR/dplyr`.
+    
+     ````r
+    iris %>% 
+      filter(Sepal.Length > 1)
+    ````
+
+4. Collect the full results to R. By default, dplyr will only collect and display the first 10 results to facilitate iteration.
+
+    ````r
+    tab %>% 
+      group_by(Species) %>%
+      summarize_all(funs(avg= mean)) %>%
+      collect()
+    ````
+
+5. Close the connection by deleting our table, removing the connection object and running the garbage collector with `gc()`
+
+    ````r
+    dplyr::db_drop_table(con$con, 'iris')
+    rm(list='con')
+    gc()
+    ````
+    
+dplyr will automatically translate your R code to SQL to execute on the database using the specified driver. dplyr implements several features to ensure a fast experience. dplyr:
+
+1. relies on lazy evaluation, evaluating the SQL query only when necessary
+2. optimizes the entire SQL query before running it against the database
+3. Only retrieves the first ten rows of results to display in R. Use `collect()` to import the entire set of results into R for saving as an R object.
+
+# Airlines database
+
+The airlines database sample is from `nycflights13` documentation is available via:
+
+    ````r
+    help(package='nycflights13')
+    ````
+
+***
+
+**Exercise 1**: *The first code chunk below uses a dplyr driver function to open a connection to the Airlines database. Run the chunk.*
+
+*The second code chunk runs your analysis from Part 1 on the full airlines data set (variable and table names have been altered to correspond with the new data set). 
+First we create table references for:*
+
+1. *flights*
+2. *planes*
+3. *airlines*
+
+*Then run the chunk to see which airline used the newest planes.*
+
+```{r airsampleexample}
+# We are using SQLite to simulate a large remote database.
+# This is a great way to try things quickly without a lot 
+# of install hassle.
+air <-  dplyr::src_sqlite(":memory:", create = TRUE)
+flights <- dplyr::copy_to(air, nycflights13::flights, 'flights')
+planes <- dplyr::copy_to(air, nycflights13::planes, 'planes')
+airlines <-  dplyr::copy_to(air, nycflights13::airlines, 'airlines')
+```
+
+
+Now please compute average construction date of planes by carrier.  A good idea is
+to work out a pipeline that works on local data and then see if it will work
+on remote data handles.
+
+```{r solution}
+# Please work your solution here.
+```
+
+
+```{r cleanup}
+# closes connection
+if (exists("air")) { 
+  rm(air)
+  gc()
+}
+```
+
+
+# Further Learning
+
+For a more extensive example that includes fitting a model and using the model to score data within the database, read [Analysis of Air On Time Data](http://www.rpubs.com/nwstephens/airontime) by Nathan Stephens.
+

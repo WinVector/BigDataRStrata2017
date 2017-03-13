@@ -1,0 +1,18 @@
+---
+title: "R with Big Data 5: Sparklyr examples"
+author: "Garrett Grolemund and Nathan Stephens"
+date: "September 27, 2016"
+output: html_document
+---
+
+## Titanic Machine Learning Method Comparison
+
+<https://beta.rstudioconnect.com/content/1518/>
+
+## Iris K Means Clustering Demo
+
+<http://sparkdemo.rstudio.com/apps/iris-k-means/>
+
+## Diamonds Dashboard
+
+<https://sparkdemo.rstudio.com/dashboards/diamonds-explorer/>

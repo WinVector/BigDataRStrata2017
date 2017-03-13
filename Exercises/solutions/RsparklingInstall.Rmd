@@ -1,0 +1,162 @@
+---
+title: "RSparkling Install"
+author: "Nina Zumel"
+date: "January 23, 2017"
+output: html_document
+---
+
+This is just a record of installing h2o and RSparkling. It recreates the installation 
+instructions from [here](http://spark.rstudio.com/h2o.html) and fixes from [here](https://gist.github.com/edgararuiz/6453d44a91c85a87998cfeb0dfed9fa9) and [here](https://gist.github.com/JohnMount/bdfb47c2d02f96a4a36017c7e5ce2de6). For our use only.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Install Spark and H20
+
+Trying  h2o R package version 3.10.0.7 (H2O “Turing” release, build 7) and Spark 2.0.0.
+(Only need to run this block once)
+
+```{r install, eval=FALSE}
+# updated from https://gist.github.com/edgararuiz/6453d44a91c85a87998cfeb0dfed9fa9
+# The following two commands remove any previously installed H2O packages for R.
+if ("package:h2o" %in% search()) { detach("package:h2o", unload=TRUE) }
+if ("h2o" %in% rownames(installed.packages())) { remove.packages("h2o") }
+
+# Next, we download packages that H2O depends on.
+pkgs <- c("methods","statmod","stats","graphics","RCurl","jsonlite","tools","utils")
+for (pkg in pkgs) {
+  if (! (pkg %in% rownames(installed.packages()))) { install.packages(pkg) }
+}
+
+# Now we download, install and initialize the H2O package for R.
+install.packages("h2o", type = "source", repos = "http://h2o-release.s3.amazonaws.com/h2o/rel-turnbull/2/R")
+
+# Installing 'rsparkling' from CRAN
+install.packages("rsparkling")
+options(rsparkling.sparklingwater.version = "2.0.3")
+# Reinstalling 'sparklyr' 
+install.packages("sparklyr")
+sparklyr::spark_install(version = "2.0.0")
+```
+
+Try an example.
+
+```{r example}
+options(rsparkling.sparklingwater.version = "2.0.3")
+library("rsparkling") 
+library("sparklyr")
+
+# start up Spark
+sc <- spark_connect(master = "local", version =  "2.0.0")
+
+# start up h2o, and tell it where Spark is
+h2ocontext <- h2o_context(sc)
+
+library("dplyr")
+library("ggplot2")
+
+mtcars_tbl <- copy_to(sc, mtcars, overwrite = TRUE)
+mtcars_tbl
+
+# transform our data set, and then partition into 'training', 'test'
+partitions <- mtcars_tbl %>%
+  filter(hp >= 100) %>%
+  mutate(cyl8 = cyl == 8) %>%
+  sdf_partition(training = 0.5, test = 0.5, seed = 1099)
+
+library("h2o")
+# h2ohandle <- h2o.init() # context probably does this under the covers
+```
+
+
+Now, let’s perform some simple transformations – we’ll
+
+    Remove all cars with horsepower less than 100,
+    Produce a column encoding whether a car has 8 cylinders or not,
+    Partition the data into separate training and test data sets,
+    Fit a model to our training data set,
+    Evaluate our predictive performance on our test dataset.
+    
+The `sdf_partition` call is worth calling out (maybe in the slides, in the appropriate place).
+It splits the remote data into separate (remote) tables and returns a list of pointers,
+labeled by the partition labels.
+
+```{r sparksplit}
+# transform our data set, and then partition into 'training', 'test'
+partitions <- mtcars_tbl %>%
+  filter(hp >= 100) %>%
+  mutate(cyl8 = cyl == 8) %>%
+  sdf_partition(training = 0.5, test = 0.5, seed = 1099)
+```
+
+Now, we convert our training and test sets into H2O Frames using rsparkling conversion functions. We have already split the data into training and test frames using dplyr.
+
+```{r h2oframes}
+training <- as_h2o_frame(sc, partitions$training)
+test <- as_h2o_frame(sc, partitions$test)
+```
+
+Alternatively, we can use the `h2o.splitFrame()` function instead of `sdf_partition()` to partition the data within H2O instead of Spark (e.g. `partitions <- h2o.splitFrame(as_h2o_frame(mtcars_tbl), 0.5)`)
+
+```{r h2otrain}
+# fit a linear model to the training dataset
+glm_model <- h2o.glm(x = c("wt", "cyl"), 
+                     y = "mpg", 
+                     training_frame = training,
+                     lambda_search = TRUE)
+```
+
+For linear regression models produced by H2O, we can use either print() or summary() to learn a bit more about the quality of our fit. The summary() method returns some extra information about scoring history and variable importance.
+
+```{r h2oprintmodel}
+print(glm_model)
+```
+
+The output suggests that our model is a fairly good fit, and that both a cars weight, as well as the number of cylinders in its engine, will be powerful predictors of its average fuel consumption. (The model suggests that, on average, heavier cars consume more fuel.)
+
+Let’s use our H2O model fit to predict the average fuel consumption on our test data set, and compare the predicted response with the true measured fuel consumption. We’ll build a simple ggplot2 plot that will allow us to inspect the quality of our predictions.
+
+```{r h2plot}
+# compute predicted values on our test dataset
+pred <- h2o.predict(glm_model, newdata = test)
+class(pred)
+
+# convert from H2O Frame to Spark DataFrame
+predicted <- as_spark_dataframe(sc, pred)
+class(predicted)
+
+# extract the true 'mpg' values from our test dataset
+actual <- partitions$test %>%
+  select(mpg) %>%
+  collect() %>%
+  `[[`("mpg")
+class(actual)
+
+# produce a data.frame housing our predicted + actual 'mpg' values
+# notice we don't want to assign data.frame (or things to convert to them)
+# directly as they land with their own column names.
+data <- data.frame(
+  predicted = sdf_read_column(predicted,'predict'),
+  actual    = actual
+)
+str(data)
+
+# plot predicted vs. actual values
+ggplot(data, aes(x = actual, y = predicted)) +
+  geom_abline(lty = "dashed", col = "red") +
+  geom_point() +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  coord_fixed(ratio = 1) +
+  labs(
+    x = "Actual Fuel Consumption",
+    y = "Predicted Fuel Consumption",
+    title = "Predicted vs. Actual Fuel Consumption"
+  )
+```
+
+```{r cleanup}
+spark_disconnect_all()
+rm(list=ls())
+gc()
+```
