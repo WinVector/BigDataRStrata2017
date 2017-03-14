@@ -1,5 +1,5 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-This is where we will distribute all materials for:
+Materials for:
 
 #### [Modeling big data with R, sparklyr, and Apache Spark](https://conferences.oreilly.com/strata/strata-ca/public/schedule/detail/55791)
 
@@ -11,8 +11,6 @@ This is where we will distribute all materials for:
 
     John Mount  (Win-Vector LLC)
 
-Please do not peek too much yet!
-
 Description from Strata announcement
 ------------------------------------
 
@@ -20,9 +18,11 @@ Modeling big data with R, sparklyr, and Apache Spark
 
 John Mount (Win Vector LLC) 1:30pm–5:00pm Tuesday, March 14, 2017 Data science & advanced analytics Location: LL21 C/D Level: Intermediate Secondary topics: R
 
-Who is this presentation for?
+#### Who is this presentation for?
 
-Data scientists, data analysts, modelers, R users, Spark users, statisticians, and those in IT Prerequisite knowledge
+Data scientists, data analysts, modelers, R users, Spark users, statisticians, and those in IT
+
+#### Prerequisite knowledge
 
 Basic familiarity with R Experience using the dplyr R package (If you have not used dplyr before, please read this chapter before coming to class.) Materials or downloads needed in advance
 
