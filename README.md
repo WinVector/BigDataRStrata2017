@@ -11,7 +11,7 @@ This is where we will distribute all materials for:
 
     John Mount  (Win-Vector LLC)
 
-Please do not peak too much yet!
+Please do not peek too much yet!
 
 Description from Strata announcement
 ------------------------------------
