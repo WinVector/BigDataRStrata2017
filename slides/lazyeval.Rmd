@@ -1,0 +1,61 @@
+---
+title: "lazyeval"
+author: "Win-Vector LLC"
+date: "2/24/2017"
+output: html_document
+---
+
+
+```{r setup}
+library("sparklyr")
+library("dplyr")
+sc <- spark_connect(master = "local", 
+                    version = "2.0.0",
+                    hadoop_version="2.7")
+iris_tbl <- copy_to(sc, iris, "iris", 
+                    overwrite= TRUE)
+```
+
+Deliberate error (wrote "zpecies" instead of "Species", pretty much the story of my life). Yet, as we see below the error doesn't happen yet.
+
+```{r errorButNoError}
+res <- iris_tbl %>%
+  group_by(zpecies) %>%
+  summarize_all(funs(typical=mean))
+```
+
+But once we try to use the value we trigger the (faulty) calculation and get our error.
+
+```{r errorFinallyShowsup, error=TRUE}
+print(res)
+```
+
+One way to work around this is to force <code>compute()</code> on values you know you are going to use.
+
+```{r compute1, error=TRUE}
+res <- iris_tbl %>%
+  group_by(zpecies) %>%
+  summarize_all(funs(typical=mean)) %>%
+  compute()
+```
+
+What a complex calculation really is:
+
+```{r calc}
+res <- iris_tbl %>%
+  group_by(Species) %>%
+  summarize_all(funs(typical=mean)) %>% 
+  show_query
+```
+
+What a materialized table looks like:
+
+```{r materialize}
+res <- iris_tbl %>%
+  group_by(Species) %>%
+  summarize_all(funs(typical=mean)) %>%
+  compute(name= 'summarizedIris') %>%
+  show_query
+```
+
+
