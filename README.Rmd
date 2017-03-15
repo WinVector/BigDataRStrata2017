@@ -19,7 +19,8 @@ Materials for:
 
     John Mount  (Win-Vector LLC)
     
-    
+
+We have a short video showing how to install Spark using R and RStudio [here](https://youtu.be/qnINvPqcRvE).
     
 
 Description from Strata announcement
