@@ -44,7 +44,9 @@ Sparklyr, developed by RStudio in conjunction with IBM, Cloudera, and [H2O](http
 
 John Mount demonstrates how to use sparklyr to analyze big data in Spark, covering filtering and manipulating Spark data to import into R and using R to run machine-learning algorithms on data in Spark. John also also explores the sparklyr integration built into the RStudio IDE.
 
-Derived from <https://github.com/rstudio/Strata2016>. Public repository is: <https://github.com/WinVector/BigDataRStrata2017>.
+Derived from [R for big data](https://conferences.oreilly.com/strata/strata-ny-2016/public/schedule/detail/52369) (GitHub"" <https://github.com/rstudio/Strata2016>).
+
+Public repository is: <https://github.com/WinVector/BigDataRStrata2017>.
 
 ###### config
 
