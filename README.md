@@ -11,14 +11,16 @@ Materials for:
 
     John Mount  (Win-Vector LLC)
 
-We have a short video showing how to install Spark using R and RStudio [here](https://youtu.be/qnINvPqcRvE).
+We have a short video showing how to install [Spark](http://spark.apache.org) using [R](https://cran.r-project.org) and [RStudio](https://www.rstudio.com) [here](https://youtu.be/qnINvPqcRvE).
+
+Also please click through for slides from Edgar Ruiz's excellent [Strata Sparklyr presentation](https://conferences.oreilly.com/strata/strata-ca/public/schedule/detail/55800) and [cheat-sheet](http://spark.rstudio.com/images/sparklyr-cheatsheet.pdf).
 
 Description from Strata announcement
 ------------------------------------
 
 Modeling big data with R, sparklyr, and Apache Spark
 
-John Mount (Win Vector LLC) 1:30pm–5:00pm Tuesday, March 14, 2017 Data science & advanced analytics Location: LL21 C/D Level: Intermediate Secondary topics: R
+[John Mount](http://www.win-vector.com/site/staff/john-mount/) ([Win Vector LLC](http://www.win-vector.com/)) 1:30pm–5:00pm Tuesday, March 14, 2017 Data science & advanced analytics Location: LL21 C/D Level: Intermediate Secondary topics: R
 
 #### Who is this presentation for?
 
@@ -26,21 +28,25 @@ Data scientists, data analysts, modelers, R users, Spark users, statisticians, a
 
 #### Prerequisite knowledge
 
-Basic familiarity with R Experience using the dplyr R package (If you have not used dplyr before, please read this chapter before coming to class.) Materials or downloads needed in advance
+##### Basic familiarity with R
 
-A WiFi-enabled laptop (You'll be provided an RStudio Server Pro login for students to use on the day of the workshop.) What you'll learn
+Experience using the [dplyr](https://CRAN.R-project.org/package=dplyr) R package (If you have not used dplyr before, please read this chapter before coming to class.) Materials or downloads needed in advance.
 
-Learn how to quickly set up a local Spark instance, store big data in Spark and then connect to the data with R, use R to apply machine-learning algorithms to big data stored in Spark, and filter and aggregate big data stored in Spark and then import the results into R for analysis and visualization Understand how to extend R (sparklyr) to access the entire Spark API Description
+A WiFi-enabled laptop (You'll be provided an [RStudio Server Pro](https://www.rstudio.com/products/rstudio-server-pro/) login for students to use on the day of the workshop.)
 
-Sparklyr, developed by RStudio in conjunction with IBM, Cloudera, and H2O, provides an R interface to Spark’s distributed machine-learning algorithms and much more. Sparklyr makes practical machine learning scalable and easy. With sparklyr, you can interactively manipulate Spark data using both dplyr and SQL (via DBI); filter and aggregate Spark datasets then bring them into R for analysis and visualization; orchestrate distributed machine learning from R using either Spark MLlib or H2O SparkingWater; create extensions that call the full Spark API and provide interfaces to Spark packages; and establish Spark connections and browse Spark data frames within the RStudio IDE.
+##### What you'll learn
+
+Learn how to quickly set up a local Spark instance, store big data in Spark and then connect to the data with R, use R to apply machine-learning algorithms to big data stored in Spark, and filter and aggregate big data stored in Spark and then import the results into R for analysis and visualization Understand how to extend R and use [sparkly](http://spark.rstudio.com)) to access the entire Spark API
+
+### Description
+
+Sparklyr, developed by RStudio in conjunction with IBM, Cloudera, and [H2O](http://www.h2o.ai), provides an R interface to Spark’s distributed machine-learning algorithms and much more. Sparklyr makes practical machine learning scalable and easy. With sparklyr, you can interactively manipulate Spark data using both dplyr and SQL (via DBI); filter and aggregate Spark datasets then bring them into R for analysis and visualization; orchestrate distributed machine learning from R using either Spark MLlib or H2O SparkingWater; create extensions that call the full Spark API and provide interfaces to Spark packages; and establish Spark connections and browse Spark data frames within the RStudio IDE.
 
 John Mount demonstrates how to use sparklyr to analyze big data in Spark, covering filtering and manipulating Spark data to import into R and using R to run machine-learning algorithms on data in Spark. John also also explores the sparklyr integration built into the RStudio IDE.
 
+Derived from <https://github.com/rstudio/Strata2016>. Public repository is: <https://github.com/WinVector/BigDataRStrata2017>.
+
 ###### config
-
-Materials in preparation for [Strata March 2017](https://conferences.oreilly.com/strata/strata-ca/public/schedule/detail/55791)
-
-Derived from <https://github.com/rstudio/Strata2016>. Public repository will be <https://github.com/WinVector/BigDataRStrata2017>.
 
 Current list of CRAN packages used:
 
@@ -96,9 +102,13 @@ if ("package:h2o" %in% search()) { detach("package:h2o", unload=TRUE) }
 if ("h2o" %in% rownames(installed.packages())) { remove.packages("h2o") }
 
 # Next, we download packages that H2O depends on.
-pkgs <- c("methods","statmod","stats","graphics","RCurl","jsonlite","tools","utils")
+pkgs <- c("methods", "statmod", "stats",
+          "graphics", "RCurl", "jsonlite",
+          "tools", "utils")
 for (pkg in pkgs) {
-  if (! (pkg %in% rownames(installed.packages()))) { install.packages(pkg) }
+  if (! (pkg %in% rownames(installed.packages()))) {
+     install.packages(pkg)
+  }
 }
 
 # Now we download, install and initialize the H2O package for R.
