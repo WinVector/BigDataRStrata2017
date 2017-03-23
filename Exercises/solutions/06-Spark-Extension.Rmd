@@ -1,7 +1,9 @@
 ---
 title: 'R with Big Data 6: Spark Extensions'
 author: "John Mount"
-output: html_document
+output:
+  md_document:
+    variant: markdown_github
 ---
 
 This is only a concept script, it runs correctly but is intended for
@@ -59,7 +61,7 @@ df2
 Using `SparkR` for `R` user defined functions.
 
 ```{r sparkr}
-# Connect via SparkR
+# Connect via SparkR, more notes: https://github.com/apache/spark/tree/master/R
 SPARK_HOME <- sc$spark_home
 # https://github.com/Azure/Azure-MachineLearning-DataScience/blob/master/Misc/KDDCup2016/Code/SparkR/SparkR_sparklyr_NYCTaxi.Rmd
 # http://sbartek.github.io/sparkRInstall/installSparkReasyWay.html

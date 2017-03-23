@@ -2,7 +2,9 @@
 title: "R with Big Data 2: Big Data and Databases"
 author: "Garrett Grolemund and Nathan Stephens"
 date: "September 27, 2016"
-output: html_document
+output:
+  md_document:
+    variant: markdown_github
 ---
 
 ```{r setup, include = FALSE}

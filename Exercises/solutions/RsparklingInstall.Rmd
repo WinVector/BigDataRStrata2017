@@ -2,11 +2,13 @@
 title: "RSparkling Install"
 author: "Nina Zumel"
 date: "January 23, 2017"
-output: html_document
+output:
+  md_document:
+    variant: markdown_github
 ---
 
 This is just a record of installing h2o and RSparkling. It recreates the installation 
-instructions from [here](http://spark.rstudio.com/h2o.html) and fixes from [here](https://gist.github.com/edgararuiz/6453d44a91c85a87998cfeb0dfed9fa9) and [here](https://gist.github.com/JohnMount/bdfb47c2d02f96a4a36017c7e5ce2de6). For our use only.
+instructions from [here](http://spark.rstudio.com/h2o.html) and fixes from [here](https://gist.github.com/edgararuiz/6453d44a91c85a87998cfeb0dfed9fa9) and [here](https://gist.github.com/JohnMount/bdfb47c2d02f96a4a36017c7e5ce2de6). 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)

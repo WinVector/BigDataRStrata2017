@@ -1,7 +1,10 @@
 ---
 title: 'R with Big Data 4a: Big Data and Spark ML'
 author: "Garrett Grolemund, Nathan Stephens, Nina Zumel"
-output: html_document
+always_allow_html: yes
+output:
+  md_document:
+    variant: markdown_github
 ---
 
 ```{r setup, include = FALSE}

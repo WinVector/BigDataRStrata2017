@@ -124,7 +124,7 @@ $(document).ready(function () {
 </div>
 
 
-<p>This is just a record of installing h2o and RSparkling. It recreates the installation instructions from <a href="http://spark.rstudio.com/h2o.html">here</a> and fixes from <a href="https://gist.github.com/edgararuiz/6453d44a91c85a87998cfeb0dfed9fa9">here</a> and <a href="https://gist.github.com/JohnMount/bdfb47c2d02f96a4a36017c7e5ce2de6">here</a>. For our use only.</p>
+<p>This is just a record of installing h2o and RSparkling. It recreates the installation instructions from <a href="http://spark.rstudio.com/h2o.html">here</a> and fixes from <a href="https://gist.github.com/edgararuiz/6453d44a91c85a87998cfeb0dfed9fa9">here</a> and <a href="https://gist.github.com/JohnMount/bdfb47c2d02f96a4a36017c7e5ce2de6">here</a>.</p>
 <div id="install-spark-and-h20" class="section level2">
 <h2>Install Spark and H20</h2>
 <p>Trying h2o R package version 3.10.0.7 (H2O “Turing” release, build 7) and Spark 2.0.0. (Only need to run this block once)</p>
@@ -251,7 +251,7 @@ glm_model &lt;- h2o.glm(x = c(&quot;wt&quot;, &quot;cyl&quot;),
 ## ==============
 ## 
 ## H2ORegressionModel: glm
-## Model ID:  GLM_model_R_1488209703561_1 
+## Model ID:  GLM_model_R_1490281741691_1 
 ## GLM Model: summary
 ##     family     link                               regularization
 ## 1 gaussian identity Elastic Net (alpha = 0.5, lambda = 0.05468 )
@@ -260,7 +260,7 @@ glm_model &lt;- h2o.glm(x = c(&quot;wt&quot;, &quot;cyl&quot;),
 ##   number_of_predictors_total number_of_active_predictors
 ## 1                          2                           2
 ##   number_of_iterations                                training_frame
-## 1                    0 frame_rdd_54_8413d02461e659fce9f445ec523449eb
+## 1                    0 frame_rdd_54_8f28f4b3bfab91d18042821012ac4641
 ## 
 ## Coefficients: glm coefficients
 ##       names coefficients standardized_coefficients
@@ -332,8 +332,8 @@ ggplot(data, aes(x = actual, y = predicted)) +
 <pre class="r"><code>rm(list=ls())
 gc()</code></pre>
 <pre><code>##          used (Mb) gc trigger (Mb) max used (Mb)
-## Ncells 740310 39.6    1168576 62.5  1168576 62.5
-## Vcells 852948  6.6    1650153 12.6  1135722  8.7</code></pre>
+## Ncells 740978 39.6    1168576 62.5  1168576 62.5
+## Vcells 853198  6.6    1650153 12.6  1114369  8.6</code></pre>
 </div>
 
 

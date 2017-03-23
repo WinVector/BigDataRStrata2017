@@ -1,7 +1,10 @@
 ---
 title: 'R with Big Data 3b: Big Data and Spark SQL 2/2'
 author: "Garrett Grolemund, Nathan Stephens, John Mount and Nina Zumel"
-output: html_document
+always_allow_html: yes
+output:
+  md_document:
+    variant: markdown_github
 ---
 
 Use dplyr syntax to write Apache Spark SQL queries. Use select, where, group by, joins, and window functions in Aparche Spark SQL.

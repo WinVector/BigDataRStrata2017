@@ -1,7 +1,9 @@
 ---
 title: 'R with Big Data 3a: Big Data and Spark SQL 1/2'
 author: "Garrett Grolemund, Nathan Stephens, John Mount and Nina Zumel"
-output: html_document
+output:
+  md_document:
+    variant: markdown_github
 ---
 
 ```{r setup, include = FALSE}

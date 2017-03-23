@@ -1,8 +1,9 @@
 ---
 title: 'R with Big Data 4b: Big Data, Spark, and H2O'
 author: "Garrett Grolemund, Nathan Stephens, Nina Zumel"
-date: "September 27, 2016"
-output: html_document
+output:
+  md_document:
+    variant: markdown_github
 ---
 
 ```{r setup, include = FALSE}
