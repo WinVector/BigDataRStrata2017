@@ -215,7 +215,7 @@ show_query(bestworst)
 ## SELECT `year`, `month`, `day`, `dep_delay`
 ## FROM (SELECT `year`, `month`, `day`, `dep_delay`, min(`dep_delay`) OVER (PARTITION BY `year`, `month`, `day`) AS `zzz4`, max(`dep_delay`) OVER (PARTITION BY `year`, `month`, `day`) AS `zzz5`
 ## FROM (SELECT `year` AS `year`, `month` AS `month`, `day` AS `day`, `dep_delay` AS `dep_delay`
-## FROM `flights`) `ocnwxrqkac`) `lbyorgahok`
+## FROM `flights`) `gdqhuralea`) `fbmlpgwwtk`
 ## WHERE (`dep_delay` = `zzz4` OR `dep_delay` = `zzz5`)
 bestworst
 ## Source:   query [824 x 4]
@@ -249,7 +249,7 @@ show_query(ranked)
     ## <SQL>
     ## SELECT `year`, `month`, `day`, `dep_delay`, rank() OVER (PARTITION BY `year`, `month`, `day` ORDER BY `dep_delay` DESC) AS `rank`
     ## FROM (SELECT `year` AS `year`, `month` AS `month`, `day` AS `day`, `dep_delay` AS `dep_delay`
-    ## FROM `flights`) `cdwmfskipm`
+    ## FROM `flights`) `tcrrrtnofg`
 
 ``` r
 ranked

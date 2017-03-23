@@ -98,7 +98,7 @@ h2o_context(sc)
     ##   class org.apache.spark.h2o.H2OContext
     ##   
     ## Sparkling Water Context:
-    ##  * H2O name: sparkling-water-johnmount_1153872156
+    ##  * H2O name: sparkling-water-johnmount_2083288225
     ##  * cluster size: 1
     ##  * list of used nodes:
     ##   (executorId, host, port)
@@ -120,7 +120,7 @@ class(titanic_h2o)
 h2o.getId(titanic_h2o)
 ```
 
-    ## [1] "frame_rdd_84_96fbc6e16d3e024621cfc75d8c174656"
+    ## [1] "frame_rdd_84_9bb718063b718fccc3ded4d5b7014c3e"
 
 ``` r
 # see what we have
@@ -129,7 +129,7 @@ print(keys)
 ```
 
     ##                                             key
-    ## 1 frame_rdd_84_96fbc6e16d3e024621cfc75d8c174656
+    ## 1 frame_rdd_84_9bb718063b718fccc3ded4d5b7014c3e
 
 ``` r
 ref <- h2o.getFrame(as.character(keys[[1]]))
@@ -258,6 +258,8 @@ ml_log <- h2o.glm(x = xvars,
       |                                                                       
       |                                                                 |   0%
       |                                                                       
+      |========                                                         |  13%
+      |                                                                       
       |=================================================================| 100%
 
 Other ML algorithms
@@ -276,7 +278,7 @@ ml_rf <- h2o.randomForest(x = xvars,
       |                                                                       
       |                                                                 |   0%
       |                                                                       
-      |============================================                     |  68%
+      |================================================                 |  74%
       |                                                                       
       |=================================================================| 100%
 

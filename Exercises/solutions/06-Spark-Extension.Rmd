@@ -60,6 +60,8 @@ df2
 
 Using `SparkR` for `R` user defined functions.
 
+The following doesn't always run in a knitr evironment.  And using `SparkR` in production would entail already having the needed R packages installed.
+
 ```{r sparkr}
 # Connect via SparkR, more notes: https://github.com/apache/spark/tree/master/R
 SPARK_HOME <- sc$spark_home
@@ -75,6 +77,9 @@ schema <- structType(structField("dateStrOrig", "string"),
                      structField("dateStrNorm", "timestamp"),
                      structField("dateSec", "double"))
 dSparkR2 <- SparkR::dapply(dSparkR, function(x) {
+  if(!require('lubridate', quietly = TRUE)) {
+    install.packages("lubridate", repos= "http://cran.rstudio.com")
+  }
   s <- lubridate::ymd_hms(x[[1]])
   x <- cbind(x, s, as.numeric(s))
   x

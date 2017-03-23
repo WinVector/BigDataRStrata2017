@@ -110,6 +110,8 @@ df2
 
 Using `SparkR` for `R` user defined functions.
 
+The following doesn't always run in a knitr evironment. And using `SparkR` in production would entail already having the needed R packages installed.
+
 ``` r
 # Connect via SparkR, more notes: https://github.com/apache/spark/tree/master/R
 SPARK_HOME <- sc$spark_home
@@ -143,7 +145,7 @@ library(SparkR, lib.loc = paste0(SPARK_HOME, "/R/lib/"))
 sr <- sparkR.session(master = "local", sparkHome = SPARK_HOME)
 ```
 
-    ## Launching java with spark-submit command /Users/johnmount/Library/Caches/spark/spark-2.0.0-bin-hadoop2.7/bin/spark-submit   sparkr-shell /var/folders/7q/h_jp2vj131g5799gfnpzhdp80000gn/T//RtmpsByxM1/backend_port2fe05f01c8a
+    ## Launching java with spark-submit command /Users/johnmount/Library/Caches/spark/spark-2.0.0-bin-hadoop2.7/bin/spark-submit   sparkr-shell /var/folders/7q/h_jp2vj131g5799gfnpzhdp80000gn/T//RtmpX3ehwB/backend_port3f724e116645
 
 ``` r
 sparklyr::spark_write_parquet(df, 'df_tmp')
@@ -153,6 +155,9 @@ schema <- structType(structField("dateStrOrig", "string"),
                      structField("dateStrNorm", "timestamp"),
                      structField("dateSec", "double"))
 dSparkR2 <- SparkR::dapply(dSparkR, function(x) {
+  if(!require('lubridate', quietly = TRUE)) {
+    install.packages("lubridate", repos= "http://cran.rstudio.com")
+  }
   s <- lubridate::ymd_hms(x[[1]])
   x <- cbind(x, s, as.numeric(s))
   x
@@ -210,7 +215,7 @@ print(billionBigInteger)
 str(billionBigInteger)
 ```
 
-    ## Classes 'spark_jobj', 'shell_jobj' <environment: 0x7faab10996a0>
+    ## Classes 'spark_jobj', 'shell_jobj' <environment: 0x7fd0a8874778>
 
 ``` r
 billion <- invoke(billionBigInteger, "longValue")

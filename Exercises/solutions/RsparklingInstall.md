@@ -3,9 +3,10 @@ This is just a record of installing h2o and RSparkling. It recreates the install
 Install Spark and H20
 ---------------------
 
-Trying h2o R package version 3.10.0.7 (H2O “Turing” release, build 7) and Spark 2.0.0. (Only need to run this block once)
+Trying h2o R package version 3.10.0.7 (H2O "Turing" release, build 7) and Spark 2.0.0. (Only need to run this block once)
 
 ``` r
+# do not have RSpark loaded when doing this
 # updated from https://gist.github.com/edgararuiz/6453d44a91c85a87998cfeb0dfed9fa9
 # The following two commands remove any previously installed H2O packages for R.
 if ("package:h2o" %in% search()) { detach("package:h2o", unload=TRUE) }
@@ -25,6 +26,7 @@ install.packages("rsparkling")
 options(rsparkling.sparklingwater.version = "2.0.3")
 # Reinstalling 'sparklyr' 
 install.packages("sparklyr")
+# Allowing RStudio to restart here sometimes misses this next line
 sparklyr::spark_install(version = "2.0.0")
 ```
 
@@ -171,7 +173,7 @@ print(glm_model)
     ## ==============
     ## 
     ## H2ORegressionModel: glm
-    ## Model ID:  GLM_model_R_1490281791570_1 
+    ## Model ID:  GLM_model_R_1490284742375_1 
     ## GLM Model: summary
     ##     family     link                               regularization
     ## 1 gaussian identity Elastic Net (alpha = 0.5, lambda = 0.05468 )
@@ -180,7 +182,7 @@ print(glm_model)
     ##   number_of_predictors_total number_of_active_predictors
     ## 1                          2                           2
     ##   number_of_iterations                                training_frame
-    ## 1                    0 frame_rdd_54_8a9fd012f386a14aaf6967563f3544bb
+    ## 1                    0 frame_rdd_54_9fa080189c96c9ce934cb817336e4366
     ## 
     ## Coefficients: glm coefficients
     ##       names coefficients standardized_coefficients
@@ -286,5 +288,5 @@ gc()
 ```
 
     ##          used (Mb) gc trigger (Mb) max used (Mb)
-    ## Ncells 738618 39.5    1168576 62.5  1168576 62.5
-    ## Vcells 852459  6.6    1650153 12.6  1147297  8.8
+    ## Ncells 738768 39.5    1168576 62.5  1168576 62.5
+    ## Vcells 852507  6.6    1650153 12.6  1153407  8.8
