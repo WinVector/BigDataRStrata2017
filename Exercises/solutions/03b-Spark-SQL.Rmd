@@ -52,13 +52,23 @@ birthsYearly <- applicants_tbl %>%
 Now simulate `tidyr::spread` on the remote data, and continue.
 
 ```{r}
-# brutal, by-hand spread on remote data
+# by-hand spread on remote data
 birthsYearly <- applicants_tbl %>%
   mutate(male = ifelse(sex == "M", n_all, 0), female = ifelse(sex == "F", n_all, 0)) %>%
   group_by(year) %>%
   summarize(Male = sum(male) / 1000000, Female = sum(female) / 1000000) %>%
   arrange(year) %>%
   collect
+
+# ## Or use dev-version of replyr: https://github.com/WinVector/replyr
+# birthsYearly <- applicants_tbl %>%
+#   replyr::replyr_moveValuesToColumns(columnToTakeKeysFrom = 'sex',
+#                                      columnToTakeValuesFrom = 'n_all',
+#                                      rowKeyColumns = 'year') %>%
+#   mutate(Male= M/1000000, Female = F/1000000) %>% 
+#   select(year, Male, Female) %>%
+#   arrange(year) %>% 
+#   collect
 
 # plot it
 birthsYearly %>%
