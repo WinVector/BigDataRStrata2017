@@ -123,3 +123,5 @@ options(rsparkling.sparklingwater.version = "2.0.3")
 install.packages("sparklyr")
 sparklyr::spark_install(version = "2.0.0")
 ```
+
+Note: pleaes ignore anything I have said about using `dplyr::compute()` with `sparklyr` until [sparklyr issue 721](https://github.com/rstudio/sparklyr/issues/721) is resolved positively.
