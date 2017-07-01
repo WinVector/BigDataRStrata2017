@@ -9,6 +9,8 @@ output:
 This is only a concept script, it runs correctly but is intended for
 teaching not direct use in production.
 
+At some point the `SparkR:dapply()` functionality we are working to capture here will be available as a method called [`sparklyr::spark_apply()`](https://github.com/rstudio/sparklyr/pull/728).
+
 One point in particular is this script assumes none of the following directories are present (as it is going to try to create them and write its own temp results):
 
   * Exercises/solutions/df*_tmp

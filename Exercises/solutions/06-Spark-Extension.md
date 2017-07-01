@@ -1,5 +1,7 @@
 This is only a concept script, it runs correctly but is intended for teaching not direct use in production.
 
+At some point the `SparkR:dapply()` functionality we are working to capture here will be available as a method called [`sparklyr::spark_apply()`](https://github.com/rstudio/sparklyr/pull/728).
+
 One point in particular is this script assumes none of the following directories are present (as it is going to try to create them and write its own temp results):
 
 -   Exercises/solutions/df\*\_tmp
@@ -42,20 +44,19 @@ df  <- copy_to(sc, d, 'df')
 print(df)
 ```
 
-    ## Source:   query [10 x 1]
-    ## Database: spark connection master=local[4] app=sparklyr local=TRUE
-    ## 
+    ## # Source:   table<df> [?? x 1]
+    ## # Database: spark_connection
     ##                                                                         x
     ##                                                                     <chr>
-    ## 1                                                          20100101120101
-    ## 2                                                     2009-01-02 12-01-02
-    ## 3                                                     2009.01.03 12:01:03
-    ## 4                                                         2009-1-4 12-1-4
-    ## 5                                                       2009-1, 5 12:1, 5
-    ## 6                                                       200901-08 1201-08
-    ## 7              2009 arbitrary 1 non-decimal 6 chars 12 in between 1 !!! 6
-    ## 8  OR collapsed formats: 20090107 120107 (as long as prefixed with zeros)
-    ## 9      Automatic wday, Thu, detection, 10-01-10 10:01:10 and p format: AM
+    ##  1                                                         20100101120101
+    ##  2                                                    2009-01-02 12-01-02
+    ##  3                                                    2009.01.03 12:01:03
+    ##  4                                                        2009-1-4 12-1-4
+    ##  5                                                      2009-1, 5 12:1, 5
+    ##  6                                                      200901-08 1201-08
+    ##  7             2009 arbitrary 1 non-decimal 6 chars 12 in between 1 !!! 6
+    ##  8 OR collapsed formats: 20090107 120107 (as long as prefixed with zeros)
+    ##  9     Automatic wday, Thu, detection, 10-01-10 10:01:10 and p format: AM
     ## 10                                     Created on 10-01-11 at 10:01:11 PM
 
 Running `SQL` directly (see <http://spark.rstudio.com>).
@@ -97,9 +98,8 @@ df2 <- dplyr::tbl(sc, 'df2')
 df2
 ```
 
-    ## Source:   query [5 x 1]
-    ## Database: spark connection master=local[4] app=sparklyr local=TRUE
-    ## 
+    ## # Source:   table<df2> [?? x 1]
+    ## # Database: spark_connection
     ##                     x
     ##                 <chr>
     ## 1      20100101120101
@@ -145,7 +145,7 @@ library(SparkR, lib.loc = paste0(SPARK_HOME, "/R/lib/"))
 sr <- sparkR.session(master = "local", sparkHome = SPARK_HOME)
 ```
 
-    ## Launching java with spark-submit command /Users/johnmount/Library/Caches/spark/spark-2.0.0-bin-hadoop2.7/bin/spark-submit   sparkr-shell /var/folders/7q/h_jp2vj131g5799gfnpzhdp80000gn/T//RtmpX3ehwB/backend_port3f724e116645
+    ## Launching java with spark-submit command /Users/johnmount/Library/Caches/spark/spark-2.0.0-bin-hadoop2.7/bin/spark-submit   sparkr-shell /var/folders/7q/h_jp2vj131g5799gfnpzhdp80000gn/T//Rtmpjnl2EF/backend_port30072a4caa05
 
 ``` r
 sparklyr::spark_write_parquet(df, 'df_tmp')
@@ -170,20 +170,19 @@ dfR <- dfR %>%
 print(dfR)
 ```
 
-    ## Source:   query [10 x 3]
-    ## Database: spark connection master=local[4] app=sparklyr local=TRUE
-    ## 
+    ## # Source:   lazy query [?? x 3]
+    ## # Database: spark_connection
     ##              dateStrNorm    dateSec                  dt
     ##                    <chr>      <dbl>               <chr>
-    ## 1  2010-01-01 12:01:01.0 1262347261 2010-01-01 12:01:01
-    ## 2  2009-01-02 12:01:02.0 1230897662 2009-01-02 12:01:02
-    ## 3  2009-01-03 12:01:03.0 1230984063 2009-01-03 12:01:03
-    ## 4  2009-01-04 12:01:04.0 1231070464 2009-01-04 12:01:04
-    ## 5  2009-01-05 12:01:05.0 1231156865 2009-01-05 12:01:05
-    ## 6  2009-01-08 12:01:08.0 1231416068 2009-01-08 12:01:08
-    ## 7  2009-01-06 12:01:06.0 1231243266 2009-01-06 12:01:06
-    ## 8  2009-01-07 12:01:07.0 1231329667 2009-01-07 12:01:07
-    ## 9  2010-01-10 10:01:10.0 1263117670 2010-01-10 10:01:10
+    ##  1 2010-01-01 12:01:01.0 1262347261 2010-01-01 12:01:01
+    ##  2 2009-01-02 12:01:02.0 1230897662 2009-01-02 12:01:02
+    ##  3 2009-01-03 12:01:03.0 1230984063 2009-01-03 12:01:03
+    ##  4 2009-01-04 12:01:04.0 1231070464 2009-01-04 12:01:04
+    ##  5 2009-01-05 12:01:05.0 1231156865 2009-01-05 12:01:05
+    ##  6 2009-01-08 12:01:08.0 1231416068 2009-01-08 12:01:08
+    ##  7 2009-01-06 12:01:06.0 1231243266 2009-01-06 12:01:06
+    ##  8 2009-01-07 12:01:07.0 1231329667 2009-01-07 12:01:07
+    ##  9 2010-01-10 10:01:10.0 1263117670 2010-01-10 10:01:10
     ## 10 2010-01-11 22:01:11.0 1263247271 2010-01-11 22:01:11
 
 From: <http://spark.rstudio.com/extensions.html>.
@@ -207,7 +206,7 @@ billionBigInteger <- invoke_new(sc, "java.math.BigInteger", "1000000000")
 print(billionBigInteger)
 ```
 
-    ## <jobj[66]>
+    ## <jobj[147]>
     ##   class java.math.BigInteger
     ##   1000000000
 
@@ -215,7 +214,7 @@ print(billionBigInteger)
 str(billionBigInteger)
 ```
 
-    ## Classes 'spark_jobj', 'shell_jobj' <environment: 0x7fd0a8874778>
+    ## Classes 'spark_jobj', 'shell_jobj' <environment: 0x7fcba37eab50>
 
 ``` r
 billion <- invoke(billionBigInteger, "longValue")
