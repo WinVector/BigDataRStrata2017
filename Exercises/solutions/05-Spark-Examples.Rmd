@@ -2,8 +2,11 @@
 title: "R with Big Data 5: Sparklyr examples"
 author: "Garrett Grolemund and Nathan Stephens"
 date: "September 27, 2016"
-output: html_document
+output:
+  md_document:
+    variant: markdown_github
 ---
+
 
 ## Titanic Machine Learning Method Comparison
 
