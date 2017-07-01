@@ -219,7 +219,7 @@ for(i in names(ml_score)){
 # Plot results
 # Note that logistic regression, Naive Bayes and Neural net are all returning HARD classification, 
 # NOT probability scores. The probabilities are there for (at least) logistic, but not easily 
-# manipulable through sparklyr
+# manipulable through sparklyr (this will improve with https://github.com/rstudio/sparklyr/issues/648 ).
 ggplot(ml_gains, aes(x = cumulative_data_fraction, y = cumulative_capture_rate, colour = model)) +
   geom_point() + geom_line() +
   ggtitle("Lift Chart for Predicting Survival - Test Data Set") 
