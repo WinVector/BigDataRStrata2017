@@ -1,4 +1,5 @@
 <p>This is only a concept script, it runs correctly but is intended for teaching not direct use in production.</p>
+<p>At some point the <code>SparkR:dapply()</code> functionality we are working to capture here will be available as a method called <a href="https://github.com/rstudio/sparklyr/pull/728"><code>sparklyr::spark_apply()</code></a>.</p>
 <p>One point in particular is this script assumes none of the following directories are present (as it is going to try to create them and write its own temp results):</p>
 <ul class="incremental">
 <li>Exercises/solutions/df*_tmp</li>
@@ -30,20 +31,19 @@
 
 df  &lt;-<span class="st"> </span><span class="kw">copy_to</span>(sc, d, <span class="st">&#39;df&#39;</span>)
 <span class="kw">print</span>(df)</code></pre></div>
-<pre><code>## Source:   query [10 x 1]
-## Database: spark connection master=local[4] app=sparklyr local=TRUE
-## 
+<pre><code>## # Source:   table&lt;df&gt; [?? x 1]
+## # Database: spark_connection
 ##                                                                         x
 ##                                                                     &lt;chr&gt;
-## 1                                                          20100101120101
-## 2                                                     2009-01-02 12-01-02
-## 3                                                     2009.01.03 12:01:03
-## 4                                                         2009-1-4 12-1-4
-## 5                                                       2009-1, 5 12:1, 5
-## 6                                                       200901-08 1201-08
-## 7              2009 arbitrary 1 non-decimal 6 chars 12 in between 1 !!! 6
-## 8  OR collapsed formats: 20090107 120107 (as long as prefixed with zeros)
-## 9      Automatic wday, Thu, detection, 10-01-10 10:01:10 and p format: AM
+##  1                                                         20100101120101
+##  2                                                    2009-01-02 12-01-02
+##  3                                                    2009.01.03 12:01:03
+##  4                                                        2009-1-4 12-1-4
+##  5                                                      2009-1, 5 12:1, 5
+##  6                                                      200901-08 1201-08
+##  7             2009 arbitrary 1 non-decimal 6 chars 12 in between 1 !!! 6
+##  8 OR collapsed formats: 20090107 120107 (as long as prefixed with zeros)
+##  9     Automatic wday, Thu, detection, 10-01-10 10:01:10 and p format: AM
 ## 10                                     Created on 10-01-11 at 10:01:11 PM</code></pre>
 <p>Running <code>SQL</code> directly (see <a href="http://spark.rstudio.com" class="uri">http://spark.rstudio.com</a>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;DBI&quot;</span>)
@@ -68,9 +68,8 @@ dfx</code></pre></div>
 <pre><code>## [1] &quot;df&quot;  &quot;df2&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df2 &lt;-<span class="st"> </span>dplyr::<span class="kw">tbl</span>(sc, <span class="st">&#39;df2&#39;</span>)
 df2</code></pre></div>
-<pre><code>## Source:   query [5 x 1]
-## Database: spark connection master=local[4] app=sparklyr local=TRUE
-## 
+<pre><code>## # Source:   table&lt;df2&gt; [?? x 1]
+## # Database: spark_connection
 ##                     x
 ##                 &lt;chr&gt;
 ## 1      20100101120101
@@ -106,7 +105,7 @@ SPARK_HOME &lt;-<span class="st"> </span>sc$spark_home
 ##     intersect, rank, rbind, sample, startsWith, subset, summary,
 ##     transform, union</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sr &lt;-<span class="st"> </span><span class="kw">sparkR.session</span>(<span class="dt">master =</span> <span class="st">&quot;local&quot;</span>, <span class="dt">sparkHome =</span> SPARK_HOME)</code></pre></div>
-<pre><code>## Launching java with spark-submit command /Users/johnmount/Library/Caches/spark/spark-2.0.0-bin-hadoop2.7/bin/spark-submit   sparkr-shell /var/folders/7q/h_jp2vj131g5799gfnpzhdp80000gn/T//RtmpX3ehwB/backend_port3f724e116645</code></pre>
+<pre><code>## Launching java with spark-submit command /Users/johnmount/Library/Caches/spark/spark-2.0.0-bin-hadoop2.7/bin/spark-submit   sparkr-shell /var/folders/7q/h_jp2vj131g5799gfnpzhdp80000gn/T//Rtmpjnl2EF/backend_port30072a4caa05</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sparklyr::<span class="kw">spark_write_parquet</span>(df, <span class="st">&#39;df_tmp&#39;</span>)
 dSparkR &lt;-<span class="st"> </span>SparkR::<span class="kw">read.df</span>(<span class="st">&#39;df_tmp&#39;</span>)
 <span class="co"># http://spark.apache.org/docs/latest/sparkr.html</span>
@@ -127,20 +126,19 @@ dfR &lt;-<span class="st"> </span>dfR %&gt;%<span class="st"> </span>
 <span class="st">  </span>dplyr::<span class="kw">mutate</span>(<span class="dt">dt =</span> <span class="kw">from_unixtime</span>(dateSec)) %&gt;%
 <span class="st">  </span>dplyr::<span class="kw">select</span>(dateStrNorm, dateSec, dt)
 <span class="kw">print</span>(dfR)</code></pre></div>
-<pre><code>## Source:   query [10 x 3]
-## Database: spark connection master=local[4] app=sparklyr local=TRUE
-## 
+<pre><code>## # Source:   lazy query [?? x 3]
+## # Database: spark_connection
 ##              dateStrNorm    dateSec                  dt
 ##                    &lt;chr&gt;      &lt;dbl&gt;               &lt;chr&gt;
-## 1  2010-01-01 12:01:01.0 1262347261 2010-01-01 12:01:01
-## 2  2009-01-02 12:01:02.0 1230897662 2009-01-02 12:01:02
-## 3  2009-01-03 12:01:03.0 1230984063 2009-01-03 12:01:03
-## 4  2009-01-04 12:01:04.0 1231070464 2009-01-04 12:01:04
-## 5  2009-01-05 12:01:05.0 1231156865 2009-01-05 12:01:05
-## 6  2009-01-08 12:01:08.0 1231416068 2009-01-08 12:01:08
-## 7  2009-01-06 12:01:06.0 1231243266 2009-01-06 12:01:06
-## 8  2009-01-07 12:01:07.0 1231329667 2009-01-07 12:01:07
-## 9  2010-01-10 10:01:10.0 1263117670 2010-01-10 10:01:10
+##  1 2010-01-01 12:01:01.0 1262347261 2010-01-01 12:01:01
+##  2 2009-01-02 12:01:02.0 1230897662 2009-01-02 12:01:02
+##  3 2009-01-03 12:01:03.0 1230984063 2009-01-03 12:01:03
+##  4 2009-01-04 12:01:04.0 1231070464 2009-01-04 12:01:04
+##  5 2009-01-05 12:01:05.0 1231156865 2009-01-05 12:01:05
+##  6 2009-01-08 12:01:08.0 1231416068 2009-01-08 12:01:08
+##  7 2009-01-06 12:01:06.0 1231243266 2009-01-06 12:01:06
+##  8 2009-01-07 12:01:07.0 1231329667 2009-01-07 12:01:07
+##  9 2010-01-10 10:01:10.0 1263117670 2010-01-10 10:01:10
 ## 10 2010-01-11 22:01:11.0 1263247271 2010-01-11 22:01:11</code></pre>
 <p>From: <a href="http://spark.rstudio.com/extensions.html" class="uri">http://spark.rstudio.com/extensions.html</a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">count_lines &lt;-<span class="st"> </span>function(sc, file) {
@@ -154,11 +152,11 @@ dfR &lt;-<span class="st"> </span>dfR %&gt;%<span class="st"> </span>
 <p>A simple Java example.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">billionBigInteger &lt;-<span class="st"> </span><span class="kw">invoke_new</span>(sc, <span class="st">&quot;java.math.BigInteger&quot;</span>, <span class="st">&quot;1000000000&quot;</span>)
 <span class="kw">print</span>(billionBigInteger)</code></pre></div>
-<pre><code>## &lt;jobj[66]&gt;
+<pre><code>## &lt;jobj[147]&gt;
 ##   class java.math.BigInteger
 ##   1000000000</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(billionBigInteger)</code></pre></div>
-<pre><code>## Classes &#39;spark_jobj&#39;, &#39;shell_jobj&#39; &lt;environment: 0x7fd0a8874778&gt;</code></pre>
+<pre><code>## Classes &#39;spark_jobj&#39;, &#39;shell_jobj&#39; &lt;environment: 0x7fcba37eab50&gt;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">billion &lt;-<span class="st"> </span><span class="kw">invoke</span>(billionBigInteger, <span class="st">&quot;longValue&quot;</span>)
 <span class="kw">str</span>(billion)</code></pre></div>
 <pre><code>##  num 1e+09</code></pre>
