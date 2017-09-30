@@ -5,6 +5,7 @@ output: html_document
 
 
 ```{r setup}
+options(width = 120)
 base::date()
 library(cdata)
 suppressPackageStartupMessages(library("dplyr"))
