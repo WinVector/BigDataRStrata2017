@@ -1,0 +1,146 @@
+---
+title: "ComputeIssue"
+output: html_document
+---
+
+
+```{r setup}
+base::date()
+library(cdata)
+suppressPackageStartupMessages(library("dplyr"))
+suppressPackageStartupMessages(library("sparklyr"))
+packageVersion("dplyr")
+packageVersion("sparklyr")
+sc <- spark_connect(master = 'local', 
+                   version = '2.1.0')
+d0 <- copy_to(sc, data.frame(x=1:3, y=6:8), 
+              'exampleData')
+
+spark_set_checkpoint_dir(sc, '/Users/johnmount/Documents/work/IHG/ModelProj2/spider/workspace/mountjo/spark-warehouse/zzz')
+
+# trying advice from:
+#  https://github.com/rstudio/sparklyr/issues/1026
+
+fRegular <- function(df, si) {
+  df %>% 
+    mutate(!!si := x+y) %>%
+    select(x, y, !!si)
+}
+
+fCompute <- function(df, si) {
+  df %>% 
+    mutate(!!si := x+y) %>%
+    select(x, y, !!si) %>%
+    compute()
+}
+
+fCheckpoint <- function(df, si) {
+  df %>% 
+    mutate(!!si := x+y) %>%
+    select(x, y, !!si) %>%
+    compute() %>% sdf_checkpoint()
+}
+
+# dies at nsteps=75
+# working on  75 fPersist
+# Quitting from lines 53-118 (ComputeIssue.Rmd) 
+# Error: java.lang.OutOfMemoryError: Java heap space
+fPersist <- function(df, si) {
+  df %>% 
+    mutate(!!si := x+y) %>%
+    select(x, y, !!si) %>%
+    compute() %>% sdf_persist()
+}
+
+timeTheWork <- function(nsteps, d0, f, chain) {
+  gc()
+  system.time({
+    d <- d0
+    for(step in seq_len(nsteps)) {
+      si <- rlang::sym(paste0('v_', step))
+      if(chain) {
+        d <- f(d, si)
+      } else {
+        d <- f(d0, si)
+      }
+    }
+    collect(d) # force calculation
+  })
+}
+```
+
+```{r timings, message=FALSE}
+fnMap <- 
+  list("fRegular"    = fRegular,
+      "fCompute"    = fCompute,
+      "fCheckpoint" = fCheckpoint,
+      "fPersist"    = fPersist)
+
+cutOffs <- 
+  c("fRegular"    = 20,
+    "fCompute"    = 75,
+    "fCheckpoint" = 1000,
+    "fPersist"    = 50)
+
+timingDat <- NULL
+
+
+for(nsteps in c(1, 5, 10, 20, 50, 75, 100)) {
+  for(rep in seq_len(3)) {
+    for(fname in names(fnMap)) {
+      cutoff <- cutOffs[[fname]]
+      if((is.null(cutoff)) || (nsteps<=cutoff)) {
+        message(paste("working on ", nsteps, fname))
+        f <- fnMap[[fname]]
+        
+        # non-chained d <- f(d0)
+        tmnc <- timeTheWork(nsteps, d0, f, FALSE)
+        nonChained <- data.frame(seconds = tmnc[[3]],
+                                 nstep = nsteps,
+                                 fname = fname,
+                                 what = 'non_chained',
+                                 rep = rep,
+                                 stringsAsFactors = FALSE)
+        
+        # chained d <- f(d)
+        tmc <- timeTheWork(nsteps, d0, f, TRUE)
+        chained <- data.frame(seconds = tmc[[3]],
+                              nstep = nsteps,
+                              fname = fname,
+                              what = 'chained',
+                              rep = rep,
+                              stringsAsFactors = FALSE)
+        
+        timingDat <- bind_rows(timingDat, nonChained, chained)
+      }
+    }
+  }
+}
+```
+
+```{r report}
+timingDat %>%
+  group_by(what, fname, nstep) %>%
+  summarize(total_seconds = sum(seconds), total_stages = sum(nstep)) %>%
+  mutate(mean_seconds_per_step = total_seconds/total_stages) %>%
+  select(-total_seconds, -total_stages) %>%
+  cdata::moveValuesToColumns(rowKeyColumns = c('fname', 'nstep'),
+                             columnToTakeKeysFrom = 'what', 
+                             columnToTakeValuesFrom = 'mean_seconds_per_step') %>%
+  rename(chained_seconds_per_step = chained, 
+         unchained_seconds_per_step = non_chained) %>% 
+  mutate(slowdown = chained_seconds_per_step/unchained_seconds_per_step) %>%
+  arrange(fname, nstep) %>%
+  as.data.frame()
+```
+
+`compute()` seems to prevent stage dependent slowdown (though it is slow).  However,  at `n=200` `Java` out of memory exceptions are thrown even with `compute()`.
+
+```{r errorc, error=TRUE}
+timeTheWork(200, d0, fCompute, TRUE)
+```
+
+
+```{r cleanup}
+spark_disconnect(sc)
+```
