@@ -137,8 +137,23 @@ timingDat %>%
 
 `compute()` seems to prevent stage dependent slowdown (though it is slow).  However,  at `n=200` `Java` out of memory exceptions are thrown even with `compute()`.
 
-```{r errorc, error=TRUE}
+```{r errorcu, error=TRUE}
 timeTheWork(200, d0, fCompute, TRUE)
+```
+
+Checkpoint sometimes worked, sometimes failed.
+
+> Error: C stack usage  12321689 is too close to the limit
+> Execution halted
+
+```{r errorcp, error=TRUE, eval=FALSE}
+timeTheWork(200, d0, fCheckpoint, TRUE)
+```
+
+Persist version never returns (crashes cluster interface?).
+
+```{r errorps, error=TRUE, eval=FALSE}
+timeTheWork(200, d0, fPersist, TRUE)
 ```
 
 

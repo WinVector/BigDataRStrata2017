@@ -6,7 +6,7 @@ options(width = 120)
 base::date()
 ```
 
-    ## [1] "Sat Sep 30 08:24:34 2017"
+    ## [1] "Mon Oct  2 05:55:40 2017"
 
 ``` r
 library(cdata)
@@ -153,28 +153,28 @@ timingDat %>%
 ```
 
     ##          fname nstep chained_seconds_per_step unchained_seconds_per_step   slowdown
-    ## 1  fCheckpoint     1               0.39066667                0.405000000  0.9646091
-    ## 2  fCheckpoint     5               0.23953333                0.251200000  0.9535563
-    ## 3  fCheckpoint    10               0.24206667                0.216600000  1.1175746
-    ## 4  fCheckpoint    20               0.21351667                0.249300000  0.8564648
-    ## 5  fCheckpoint    50               0.22872667                0.241413333  0.9474484
-    ## 6  fCheckpoint    75               0.39983556                0.350506667  1.1407360
-    ## 7  fCheckpoint   100               0.28272333                0.258676667  1.0929603
-    ## 8     fCompute     1               0.35166667                0.293666667  1.1975028
-    ## 9     fCompute     5               0.17133333                0.160866667  1.0650642
-    ## 10    fCompute    10               0.14040000                0.139400000  1.0071736
-    ## 11    fCompute    20               0.16125000                0.147200000  1.0954484
-    ## 12    fCompute    50               0.21300667                0.147873333  1.4404671
-    ## 13    fCompute    75               0.27088444                0.144168889  1.8789383
-    ## 14    fPersist     1               0.30766667                0.280000000  1.0988095
-    ## 15    fPersist     5               0.19146667                0.189400000  1.0109117
-    ## 16    fPersist    10               0.17383333                0.154900000  1.1222294
-    ## 17    fPersist    20               0.21275000                0.162516667  1.3090965
-    ## 18    fPersist    50               0.26162000                0.153393333  1.7055500
-    ## 19    fRegular     1               0.09733333                0.153666667  0.6334056
-    ## 20    fRegular     5               0.05160000                0.010466667  4.9299363
-    ## 21    fRegular    10               0.08663333                0.006500000 13.3282051
-    ## 22    fRegular    20               0.18556667                0.003933333 47.1779661
+    ## 1  fCheckpoint     1               0.40033333                0.424666667  0.9427002
+    ## 2  fCheckpoint     5               0.25840000                0.279133333  0.9257225
+    ## 3  fCheckpoint    10               0.24800000                0.252333333  0.9828269
+    ## 4  fCheckpoint    20               0.23110000                0.260266667  0.8879355
+    ## 5  fCheckpoint    50               0.22464000                0.254660000  0.8821173
+    ## 6  fCheckpoint    75               0.46513333                0.358426667  1.2977085
+    ## 7  fCheckpoint   100               0.29073667                0.255883333  1.1362079
+    ## 8     fCompute     1               0.38066667                0.315666667  1.2059134
+    ## 9     fCompute     5               0.18306667                0.178933333  1.0230999
+    ## 10    fCompute    10               0.15426667                0.142233333  1.0846028
+    ## 11    fCompute    20               0.18538333                0.170583333  1.0867611
+    ## 12    fCompute    50               0.21627333                0.155273333  1.3928556
+    ## 13    fCompute    75               0.27840889                0.149511111  1.8621284
+    ## 14    fPersist     1               0.30400000                0.298666667  1.0178571
+    ## 15    fPersist     5               0.19253333                0.190733333  1.0094373
+    ## 16    fPersist    10               0.18113333                0.171566667  1.0557606
+    ## 17    fPersist    20               0.21621667                0.193750000  1.1159570
+    ## 18    fPersist    50               0.27806000                0.149600000  1.8586898
+    ## 19    fRegular     1               0.10933333                0.164666667  0.6639676
+    ## 20    fRegular     5               0.05700000                0.010533333  5.4113924
+    ## 21    fRegular    10               0.09073333                0.006600000 13.7474747
+    ## 22    fRegular    20               0.25630000                0.006383333 40.1514360
 
 `compute()` seems to prevent stage dependent slowdown (though it is slow). However, at `n=200` `Java` out of memory exceptions are thrown even with `compute()`.
 
@@ -183,40 +183,54 @@ timeTheWork(200, d0, fCompute, TRUE)
 ```
 
     ## Error: java.lang.OutOfMemoryError: GC overhead limit exceeded
-    ##  at scala.collection.mutable.ListBuffer.$plus$eq(ListBuffer.scala:174)
-    ##  at scala.collection.mutable.ListBuffer.$plus$eq(ListBuffer.scala:45)
-    ##  at scala.collection.TraversableLike$$anonfun$init$1.apply(TraversableLike.scala:457)
-    ##  at scala.collection.TraversableLike$$anonfun$init$1.apply(TraversableLike.scala:456)
-    ##  at scala.collection.immutable.List.foreach(List.scala:381)
-    ##  at scala.collection.TraversableLike$class.init(TraversableLike.scala:456)
-    ##  at scala.collection.AbstractTraversable.init(Traversable.scala:104)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:555)
-    ##  at org.apache.spark.sql.execution.InputAdapter.generateTreeString(WholeStageCodegenExec.scala:258)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:575)
-    ##  at org.apache.spark.sql.execution.WholeStageCodegenExec.generateTreeString(WholeStageCodegenExec.scala:432)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:568)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:568)
-    ##  at org.apache.spark.sql.execution.InputAdapter.generateTreeString(WholeStageCodegenExec.scala:258)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:575)
-    ##  at org.apache.spark.sql.execution.WholeStageCodegenExec.generateTreeString(WholeStageCodegenExec.scala:432)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:568)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:568)
-    ##  at org.apache.spark.sql.execution.InputAdapter.generateTreeString(WholeStageCodegenExec.scala:258)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:575)
-    ##  at org.apache.spark.sql.execution.WholeStageCodegenExec.generateTreeString(WholeStageCodegenExec.scala:432)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:568)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:568)
-    ##  at org.apache.spark.sql.execution.InputAdapter.generateTreeString(WholeStageCodegenExec.scala:258)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:575)
-    ##  at org.apache.spark.sql.execution.WholeStageCodegenExec.generateTreeString(WholeStageCodegenExec.scala:432)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:568)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:568)
-    ##  at org.apache.spark.sql.execution.InputAdapter.generateTreeString(WholeStageCodegenExec.scala:258)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:575)
-    ##  at org.apache.spark.sql.execution.WholeStageCodegenExec.generateTreeString(WholeStageCodegenExec.scala:432)
-    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.generateTreeString(TreeNode.scala:568)
+    ##  at java.util.Arrays.copyOfRange(Arrays.java:3664)
+    ##  at java.lang.String.<init>(String.java:207)
+    ##  at java.lang.StringBuilder.toString(StringBuilder.java:407)
+    ##  at scala.collection.mutable.StringBuilder.toString(StringBuilder.scala:430)
+    ##  at org.apache.spark.sql.catalyst.trees.TreeNode.treeString(TreeNode.scala:487)
+    ##  at org.apache.spark.sql.execution.QueryExecution$$anonfun$toString$3.apply(QueryExecution.scala:232)
+    ##  at org.apache.spark.sql.execution.QueryExecution$$anonfun$toString$3.apply(QueryExecution.scala:232)
+    ##  at org.apache.spark.sql.execution.QueryExecution.stringOrError(QueryExecution.scala:107)
+    ##  at org.apache.spark.sql.execution.QueryExecution.toString(QueryExecution.scala:232)
+    ##  at org.apache.spark.sql.execution.SQLExecution$.withNewExecutionId(SQLExecution.scala:54)
+    ##  at org.apache.spark.sql.Dataset.withNewExecutionId(Dataset.scala:2765)
+    ##  at org.apache.spark.sql.Dataset.org$apache$spark$sql$Dataset$$execute$1(Dataset.scala:2370)
+    ##  at org.apache.spark.sql.Dataset.org$apache$spark$sql$Dataset$$collect(Dataset.scala:2377)
+    ##  at org.apache.spark.sql.Dataset$$anonfun$count$1.apply(Dataset.scala:2405)
+    ##  at org.apache.spark.sql.Dataset$$anonfun$count$1.apply(Dataset.scala:2404)
+    ##  at org.apache.spark.sql.Dataset.withCallback(Dataset.scala:2778)
+    ##  at org.apache.spark.sql.Dataset.count(Dataset.scala:2404)
+    ##  at org.apache.spark.sql.execution.command.CacheTableCommand.run(cache.scala:45)
+    ##  at org.apache.spark.sql.execution.command.ExecutedCommandExec.sideEffectResult$lzycompute(commands.scala:58)
+    ##  at org.apache.spark.sql.execution.command.ExecutedCommandExec.sideEffectResult(commands.scala:56)
+    ##  at org.apache.spark.sql.execution.command.ExecutedCommandExec.doExecute(commands.scala:74)
+    ##  at org.apache.spark.sql.execution.SparkPlan$$anonfun$execute$1.apply(SparkPlan.scala:114)
+    ##  at org.apache.spark.sql.execution.SparkPlan$$anonfun$execute$1.apply(SparkPlan.scala:114)
+    ##  at org.apache.spark.sql.execution.SparkPlan$$anonfun$executeQuery$1.apply(SparkPlan.scala:135)
+    ##  at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:151)
+    ##  at org.apache.spark.sql.execution.SparkPlan.executeQuery(SparkPlan.scala:132)
+    ##  at org.apache.spark.sql.execution.SparkPlan.execute(SparkPlan.scala:113)
+    ##  at org.apache.spark.sql.execution.QueryExecution.toRdd$lzycompute(QueryExecution.scala:87)
+    ##  at org.apache.spark.sql.execution.QueryExecution.toRdd(QueryExecution.scala:87)
+    ##  at org.apache.spark.sql.Dataset.<init>(Dataset.scala:185)
+    ##  at org.apache.spark.sql.Dataset$.ofRows(Dataset.scala:64)
+    ##  at org.apache.spark.sql.SparkSession.sql(SparkSession.scala:592)
 
-    ## Timing stopped at: 8.863 0.214 354.4
+    ## Timing stopped at: 11.32 0.349 373.7
+
+Checkpoint sometimes worked, sometimes failed.
+
+> Error: C stack usage 12321689 is too close to the limit Execution halted
+
+``` r
+timeTheWork(200, d0, fCheckpoint, TRUE)
+```
+
+Persist version never returns (crashes cluster interface?).
+
+``` r
+timeTheWork(200, d0, fPersist, TRUE)
+```
 
 ``` r
 spark_disconnect(sc)
